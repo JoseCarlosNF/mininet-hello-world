@@ -1,3 +1,4 @@
+from mininet.link import TCLink
 from mininet.topo import Topo
 
 
@@ -17,11 +18,15 @@ class HelloTopology(Topo):
 
         # Likns to hosts 1-5 to s1
         for host in hosts[:5]:
-            self.addLink(host, switches[0])
+            self.addLink(host, switches[0], cls=TCLink, bw=100)
 
         # Likns to hosts 6-10 to s2
         for host in hosts[5:]:
             self.addLink(host, switches[1])
+
+        self.addLink(
+            hosts[0], switches[0], cls=TCLink, bw=10, delay='500ms', loss=80
+        )
 
 
 topos = {'HelloTopology': (lambda: HelloTopology())}
